@@ -8,3 +8,4 @@ num-traits = "0.2.19"
 rand = "0.9.1"
 rand_distr = "0.5.1"
 statrs = "0.18.0"
+rplt = { git = "https://github.com/AndreasArendt/rust-plot" }

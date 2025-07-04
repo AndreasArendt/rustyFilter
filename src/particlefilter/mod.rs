@@ -8,7 +8,7 @@ const N_PARTICLES: usize = 10000;
 
 #[derive(Clone, Copy, Debug)]
 pub struct State {
-    pos: Point2D<f64>,
+    pub pos: Point2D<f64>,
     weight: f64,
 }
 
@@ -23,7 +23,7 @@ impl State {
 
 pub struct ParticleFilter {
     rng: ThreadRng,
-    particles: [State; N_PARTICLES],
+    pub particles: [State; N_PARTICLES],
 }
 
 impl ParticleFilter {
