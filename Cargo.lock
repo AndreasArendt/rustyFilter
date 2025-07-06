@@ -2510,7 +2510,7 @@ checksum = "19b30a45b0cd0bcca8037f3d0dc3421eaf95327a17cad11964fb8179b4fc4832"
 [[package]]
 name = "rplt"
 version = "0.1.0"
-source = "git+https://github.com/AndreasArendt/rust-plot#cef39db3d70da42349905f72830b3c09a4fcea63"
+source = "git+https://github.com/AndreasArendt/rust-plot#b8399378b3c25d2dac9ed95bcbb39d47151a7bc9"
 dependencies = [
  "eframe",
  "egui_plot",

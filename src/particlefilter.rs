@@ -1,4 +1,4 @@
-use crate::types::point::Point2D;
+use crate::point::Point2D;
 use rand::rngs::ThreadRng;
 use rand::{Rng, rng};
 use rand_distr::{Distribution, Normal};
