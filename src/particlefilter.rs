@@ -23,27 +23,32 @@ impl State {
 
 pub struct ParticleFilter {
     rng: ThreadRng,
-    pub particles: [State; N_PARTICLES],
+    pub particles: Vec<State>,
 }
 
 impl ParticleFilter {
     pub fn new() -> Self {
         ParticleFilter {
             rng: rng(),
-            particles: [State::new(); N_PARTICLES],
+            particles: Vec::new(),
         }
     }
 
     pub fn init(&mut self, distance_m: f64) {
         for i in 0..N_PARTICLES {
-            self.particles[i].pos.x =
-                distance_m * f64::cos((i as f64) / (N_PARTICLES as f64) * std::f64::consts::TAU);
-            self.particles[i].pos.y =
-                distance_m * f64::sin((i as f64) / (N_PARTICLES as f64) * std::f64::consts::TAU);
+            self.particles.push(State {
+                pos: Point2D {
+                    x: distance_m
+                        * f64::cos((i as f64) / (N_PARTICLES as f64) * std::f64::consts::TAU),
+                    y: distance_m
+                        * f64::sin((i as f64) / (N_PARTICLES as f64) * std::f64::consts::TAU),
+                },
+                weight: 1.0 / N_PARTICLES as f64,
+            });
         }
     }
 
-    pub fn sample(&mut self, sigma : f64) {
+    pub fn sample(&mut self, sigma: f64) {
         let normal = Normal::new(0.0, sigma).unwrap();
 
         for p in self.particles.iter_mut() {
@@ -52,7 +57,7 @@ impl ParticleFilter {
         }
     }
 
-    pub fn correct(&mut self, distance_m: f64, robot: &Point2D<f64>, sigma : f64) {
+    pub fn correct(&mut self, distance_m: f64, robot: &Point2D<f64>, sigma: f64) {
         let gaussian = StatrsNormal::new(0.0, sigma).unwrap();
 
         let weight_sum: f64 = self
@@ -71,10 +76,10 @@ impl ParticleFilter {
     }
 
     pub fn resample(&mut self) {
-        let mut new_particles: [State; N_PARTICLES] = self.particles.clone();
+        let mut new_particles: Vec<State> = self.particles.clone();
 
         let r = self.rng.random_range(0.0..=1.0 / (N_PARTICLES as f64));
-        let mut c = self.particles[0].weight;
+        let mut c = self.particles.first().unwrap().weight;
         let mut i = 1;
 
         for m in 0..N_PARTICLES {
@@ -85,7 +90,7 @@ impl ParticleFilter {
                 c += self.particles[i].weight;
             }
 
-            new_particles[m] = self.particles[i].clone();
+            new_particles[m] = self.particles[i];
         }
 
         self.particles = new_particles;
@@ -104,5 +109,5 @@ impl ParticleFilter {
             x: mean_x,
             y: mean_y,
         }
-    }    
+    }
 }
